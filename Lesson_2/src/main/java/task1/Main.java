@@ -38,20 +38,22 @@ public class Main {
         System.out.println();
         System.out.println("Duplicate filtered, grouped by name, sorted by name and id:");
         System.out.println();
-        groupedByName(RAW_DATA);
+
+        if (Objects.nonNull(RAW_DATA)){
+            groupedByName(RAW_DATA).forEach((key, value) -> {
+                System.out.println("Key: " + key);
+                System.out.println("Value: " + value);
+            });
+        }
     }
 
 
-    public static void groupedByName(Person[] data) {
+    public static Map<String, Long> groupedByName(Person[] data) {
         Predicate<Person> checkNullPerson = (person)-> Objects.nonNull(person) && Objects.nonNull(person.getName());
-        Arrays.stream(data)
+        return Arrays.stream(data)
                 .filter(checkNullPerson)
                 .distinct()
-                .collect(Collectors.groupingBy(Person::getName, Collectors.counting()))
-                .forEach((key, value) -> {
-                    System.out.println("Key: " + key);
-                    System.out.println("Value: " + value);
-                });
+                .collect(Collectors.groupingBy(Person::getName, Collectors.counting()));
     }
 
     static class Person {
